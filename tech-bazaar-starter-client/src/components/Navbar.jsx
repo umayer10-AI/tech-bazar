@@ -26,6 +26,7 @@ const Navbar = () => {
           🎉 Avail Up to 4% Extra Discount with Bank Transfer | 💳 Cash on
           Delivery Available | 🚚 Fast Delivery in 2–3 Days.
         </marquee>
+        {/* <marquee> hello</marquee> */}
       </div>
 
       <nav className="sticky top-0 z-40 w-full border-b border-separator bg-background/70 backdrop-blur-lg">
