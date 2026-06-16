@@ -3,10 +3,11 @@ import ProductDetails from '@/components/dashboard/seller/ProductDetails';
 import { sellerProductData } from '@/lib/api/data';
 import React from 'react';
 
-const page = async () => {
+const page = async ({searchParams}) => {
 
-    const data = await sellerProductData()
-    console.log(data)
+    const params = await searchParams
+    const data = await sellerProductData(params.page)
+    console.log(params)
 
     return (
         <div>

@@ -1,7 +1,12 @@
 const BaseUrl = process.env.NEXT_PUBLIC_SERVER_URL
 
-export const getData = async(path) => {
-    const res = await fetch(`${BaseUrl}${path}`)
+export const getData = async(path,token) => {
+    const res = await fetch(`${BaseUrl}${path}`,{
+        method: "GET",
+        headers: {
+            authorization: `Bearer ${token}`
+        },
+    })
     return res.json()
 }
 

@@ -14,14 +14,13 @@ import { usePathname, useRouter } from "next/navigation";
 const Sidebar = () => {
   const { data: session } = authClient.useSession();
   const user = session?.user;
-  // console.log(user)
 
   const pathname = usePathname();
   const router = useRouter();
 
   let menuItems = [];
 
-  if(user?.role === "seller") {
+  if (user?.role === "seller") {
     menuItems = [
       {
         name: "Overview",
@@ -41,7 +40,7 @@ const Sidebar = () => {
     ];
   }
 
-  if(user?.role === "buyer") {
+  if (user?.role === "buyer") {
     menuItems = [
       {
         name: "Overview",
@@ -61,7 +60,7 @@ const Sidebar = () => {
     ];
   }
 
-  if(user?.role === "admin") {
+  if (user?.role === "admin") {
     menuItems = [
       {
         name: "Overview",
@@ -69,7 +68,7 @@ const Sidebar = () => {
         icon: LayoutDashboard,
       },
       {
-        name: "User manage",
+        name: "User Manage",
         href: "/dashboard/admin/manage",
         icon: Package,
       },
@@ -87,12 +86,14 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="w-64 min-h-screen bg-slate-900 text-white border-r border-slate-800 flex flex-col">
+    <aside className="w-64 h-screen bg-slate-900 text-white border-r border-slate-800 flex flex-col sticky top-0">
+      {/* Header */}
       <div className="p-6 border-b border-slate-800">
         <h2 className="text-2xl font-bold">Dashboard</h2>
       </div>
 
-      <nav className="flex-1 px-4 py-4">
+      {/* Menu */}
+      <nav className="flex-1 overflow-y-auto px-4 py-4">
         <ul className="space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon;
@@ -118,13 +119,13 @@ const Sidebar = () => {
       </nav>
 
       {/* Bottom Actions */}
-      <div className="p-4 border-t border-slate-800 space-y-2">
+      <div className="p-4 border-t border-slate-800 space-y-2 mt-auto">
         <button
-          onClick={() => router.push('/')}
+          onClick={() => router.push("/")}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all"
         >
           <ArrowLeft size={20} />
-          <span>Back</span>
+          <span>Back to Home</span>
         </button>
 
         <button

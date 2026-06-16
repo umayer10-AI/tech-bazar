@@ -96,10 +96,23 @@ async function run() {
       res.json(result)
     })
 
-    app.get('/seller/products',async(req,res) => {
-      const result = await productsCollection.find().toArray()
+    app.get('/seller/products',verify,sellerVerify, async(req,res) => {
+
+      const {page=1, limit=10} = req.query
+      const skip = (Number(page)-1) * Number(limit)
+
+      const result = await productsCollection.find({userId: req.user.id}).skip(skip).limit(Number(limit)).toArray()
       res.json(result)
     })
+
+    // app.get('/seller/products', async(req,res) => {
+
+    //   const {page=1, limit=10} = req.query
+    //   const skip = (Number(page)-1) * Number(limit)
+
+    //   const result = await productsCollection.find().skip(skip).limit(Number(limit)).toArray()
+    //   res.json(result)
+    // })
     
 
     await client.db("admin").command({ ping: 1 });
