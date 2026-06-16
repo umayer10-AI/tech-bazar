@@ -39,4 +39,5 @@ const AllProducts = async ({search}) => {
 
 
 
+
 export default AllProducts;
