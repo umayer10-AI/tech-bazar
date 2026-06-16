@@ -96,23 +96,55 @@ async function run() {
       res.json(result)
     })
 
-    app.get('/seller/products',verify,sellerVerify, async(req,res) => {
-
-      const {page=1, limit=10} = req.query
-      const skip = (Number(page)-1) * Number(limit)
-
-      const result = await productsCollection.find({userId: req.user.id}).skip(skip).limit(Number(limit)).toArray()
-      res.json(result)
-    })
-
-    // app.get('/seller/products', async(req,res) => {
+    // app.get('/seller/products',verify,sellerVerify, async(req,res) => {
 
     //   const {page=1, limit=10} = req.query
     //   const skip = (Number(page)-1) * Number(limit)
 
-    //   const result = await productsCollection.find().skip(skip).limit(Number(limit)).toArray()
+    //   const result = await productsCollection.find({userId: req.user.id}).skip(skip).limit(Number(limit)).toArray()
     //   res.json(result)
     // })
+
+    app.get('/seller/products', verify, sellerVerify, async (req, res) => {
+
+        const { page = 1, limit = 10 } = req.query;
+        const skip = (Number(page) - 1) * Number(limit);
+        const query = { userId: req.user.id };
+        const total = await productsCollection.countDocuments(query);
+        const result = await productsCollection.find(query).skip(skip).limit(Number(limit)).toArray();
+
+        res.json({data: result,total,page: Number(page),totalPages: Math.ceil(total/Number(limit)),
+        });
+    });
+
+    app.get('/products', async(req,res) => {
+      const {search} = req.query
+      console.log(search)
+      let cursor;
+      if(!search){
+        cursor = await productsCollection.find()
+      }
+      else{
+        cursor = await productsCollection.find({
+          $or:[
+            {
+              title:{
+                $regex: search,
+                $options: 'i'
+              }
+            },
+            {
+              description:{
+                $regex: search,
+                $options: 'i'
+              }
+            },
+          ]
+        })
+      }
+      const result = await cursor.toArray()
+      res.json(result)
+    })
     
 
     await client.db("admin").command({ ping: 1 });

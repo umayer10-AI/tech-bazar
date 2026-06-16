@@ -1,8 +1,9 @@
 import Image from "next/image";
-import React from "react";
 import Pagination from "./Pagination";
 
-const ProductDetails = ({ products }) => {
+const ProductDetails = ({ products, totalPages, currentPage }) => {
+  const startIndex = (currentPage - 1) * 10;
+
   return (
     <div>
       <table className="w-full border border-gray-300">
@@ -19,9 +20,9 @@ const ProductDetails = ({ products }) => {
 
         <tbody>
           {products.map((product, index) => (
-            <tr key={index}>
+            <tr key={product._id || index}>
               <td className="border p-2 text-center">
-                {index + 1}
+                {startIndex + index + 1}
               </td>
 
               <td className="border p-2">{product.title}</td>
@@ -42,9 +43,12 @@ const ProductDetails = ({ products }) => {
           ))}
         </tbody>
       </table>
-      <Pagination></Pagination>
+
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+      />
     </div>
   );
 };
-
-export default ProductDetails;
+export default ProductDetails

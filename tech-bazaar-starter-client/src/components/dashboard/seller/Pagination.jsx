@@ -1,45 +1,46 @@
 "use client";
 
-const Pagination = ({
-  currentPage,
-  totalPages,
-  onPageChange,
-}) => {
+import { useRouter, useSearchParams } from "next/navigation";
+
+const Pagination = ({ totalPages }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const currentPage = Number(searchParams.get("page") || 1);
+
+  const changePage = (page) => {
+    router.push(`?page=${page}`, { scroll: false });
+  };
+
   return (
-    <div className="flex items-center justify-center gap-2 mt-6">
-      {/* Previous */}
+    <div className="flex gap-2 justify-center mt-6">
+      {/* Prev */}
       <button
-        onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-4 py-2 rounded-lg border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+        onClick={() => changePage(currentPage - 1)}
+        className="px-3 py-1 border rounded disabled:opacity-50"
       >
-        Previous
+        Prev
       </button>
 
-      {/* Page Numbers */}
-      {[...Array(totalPages)].map((_, index) => {
-        const page = index + 1;
-
-        return (
-          <button
-            key={page}
-            onClick={() => onPageChange(page)}
-            className={`w-10 h-10 rounded-lg border transition ${
-              currentPage === page
-                ? "bg-blue-600 text-white border-blue-600"
-                : "hover:bg-gray-100"
-            }`}
-          >
-            {page}
-          </button>
-        );
-      })}
+      {/* Pages */}
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        <button
+          key={page}
+          onClick={() => changePage(page)}
+          className={`px-3 py-1 border rounded ${
+            currentPage === page ? "bg-black text-white" : ""
+          }`}
+        >
+          {page}
+        </button>
+      ))}
 
       {/* Next */}
       <button
-        onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 rounded-lg border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+        onClick={() => changePage(currentPage + 1)}
+        className="px-3 py-1 border rounded disabled:opacity-50"
       >
         Next
       </button>
