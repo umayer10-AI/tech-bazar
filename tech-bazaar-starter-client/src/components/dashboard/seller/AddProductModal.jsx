@@ -3,11 +3,17 @@ import React from "react";
 import {Button,Input,Label,Modal,Surface,TextField,} from "@heroui/react";
 import { uploadImageToImgBB } from "@/lib/imgbb";
 import { addProduct } from "@/lib/api/actionData";
+import { authClient } from "@/lib/auth-client";
 
 const AddProductModal = () => {
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+
+      e.preventDefault();
+
+      const token = await authClient.token()
+      const t = token?.data?.token
+    //   console.log(t)
 
   const formData = new FormData(e.target);
 
@@ -27,7 +33,7 @@ const AddProductModal = () => {
 
     console.log(productData);
 
-    const result = await addProduct(productData)
+    const result = await addProduct(productData,t)
     if(result.insertedId){
         alert('Data added successfully')
     }
