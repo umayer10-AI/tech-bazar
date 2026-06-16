@@ -5,7 +5,7 @@ export const postPatch = async(data, path, method="POST",token) => {
         method: method,
         headers: {
             'content-type': 'application/json',
-            authorization: `Bearer ${token}`
+            authorization: `Bearer ${token?.token}`
         },
         body: JSON.stringify(data)
     })

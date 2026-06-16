@@ -2,6 +2,7 @@ const express = require("express");
 const dontenv = require("dotenv");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const { createRemoteJWKSet, jwtVerify } = require("jose-cjs");
 dontenv.config();
 
 const uri = process.env.MONGODB_URI;
@@ -12,7 +13,7 @@ const PORT = process.env.PORT;
 app.use(
   cors({
     credentials: true,
-    origin: [process.env.CLIENT_URL],
+    origin: [process.env.NEXT_PUBLIC_CLIENT_URL],
   }),
 );
 app.use(express.json());
@@ -24,6 +25,30 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
+
+const JWKS = createRemoteJWKSet(
+  new URL(`${process.env.NEXT_PUBLIC_CLIENT_URL}/api/auth/jwks`)
+)
+
+const verify = async (req,res,next) => {
+  const header = req.headers.authorization
+  if(!header){
+    return res.status(401).json({message: "Unauthorized"})
+  }
+  const token = header.split(' ')[1]
+  if(!token){
+    return res.status(401).json({message: "Unauthorized"})
+  }
+
+  try{
+    const { payload } = await jwtVerify(token, JWKS)
+    console.log(payload)
+    next()
+  }
+  catch(error){
+    return res.status(401).json({message: "Forbidden"})
+  }
+}
 
 async function run() {
   try {
@@ -56,7 +81,7 @@ async function run() {
 
     })
 
-    app.post('/seller/products', async(req,res) => {
+    app.post('/seller/products',verify, async(req,res) => {
       const data = req.body
       const result = await productsCollection.insertOne(data)
       res.json(result)

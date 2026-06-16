@@ -12,7 +12,7 @@ const AddProductModal = () => {
       e.preventDefault();
 
       const token = await authClient.token()
-      const t = token?.data?.token
+      const t = token?.data
     //   console.log(t)
 
   const formData = new FormData(e.target);
