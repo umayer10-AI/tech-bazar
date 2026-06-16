@@ -4,7 +4,7 @@ import {Button,Input,Label,Modal,Surface,TextField,} from "@heroui/react";
 import { uploadImageToImgBB } from "@/lib/imgbb";
 
 const AddProductModal = () => {
-    
+
   const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -25,7 +25,9 @@ const AddProductModal = () => {
     };
 
     console.log(productData);
-  } catch (error) {
+
+  } 
+  catch(error){
     console.log(error);
   }
 };
