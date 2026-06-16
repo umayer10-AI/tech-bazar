@@ -1,20 +1,34 @@
 import { NextResponse } from "next/server"
 import { headers } from 'next/headers'
 import { stripe } from "@/lib/stripe";
+import { auth } from "@/lib/auth";
 
 export async function POST() {
   try {
     const headersList = await headers()
     const origin = headersList.get('origin')
 
+    const userSession = await auth.api.getSession({
+        headers: await headers()
+    })
+    const user = userSession?.user
+
+    const PRICE_ID = 'price_1TimXYABZfK1ETNEpARZlHjI'
+
     const session = await stripe.checkout.sessions.create({
+        customer_email: user?.email,
       line_items: [
         {
-          price: '{{PRICE_ID}}',
+          price: PRICE_ID,
           quantity: 1,
         },
       ],
-      mode: 'payment',
+      metadata:{
+        priceId: PRICE_ID,
+        userId: user?.id,
+        userEmail: user?.email,
+      },
+      mode: 'subscription',
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
     });
     return NextResponse.redirect(session.url, 303)
