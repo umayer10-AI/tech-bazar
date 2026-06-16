@@ -2,6 +2,7 @@
 import React from "react";
 import {Button,Input,Label,Modal,Surface,TextField,} from "@heroui/react";
 import { uploadImageToImgBB } from "@/lib/imgbb";
+import { addProduct } from "@/lib/api/actionData";
 
 const AddProductModal = () => {
 
@@ -25,6 +26,12 @@ const AddProductModal = () => {
     };
 
     console.log(productData);
+
+    const result = await addProduct(productData)
+    if(result.insertedId){
+        alert('Data added successfully')
+    }
+    // console.log(result)
 
   } 
   catch(error){

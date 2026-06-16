@@ -31,6 +31,7 @@ async function run() {
     const db = client.db("tech-bazaar");
     const subcriptionCollection = db.collection('subscriptions')
     const userCollection = db.collection('user')
+    const productsCollection = db.collection('products')
 
 
     app.post('/subscription', async(req,res) => {
@@ -53,6 +54,12 @@ async function run() {
 
       res.json({message: 'Payment Successfull'})
 
+    })
+
+    app.post('/seller/products', async(req,res) => {
+      const data = req.body
+      const result = await productsCollection.insertOne(data)
+      res.json(result)
     })
     
 
