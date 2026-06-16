@@ -1,9 +1,11 @@
+import AddProductModal from '@/components/dashboard/seller/AddProductModal';
 import React from 'react';
 
 const page = () => {
     return (
         <div>
-            products
+            <h1 className='text-3xl font-bold my-5'>products</h1>
+            <AddProductModal></AddProductModal>
         </div>
     );
 };

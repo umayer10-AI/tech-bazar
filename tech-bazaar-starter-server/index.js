@@ -43,7 +43,7 @@ async function run() {
 
       const isExist = await subcriptionCollection.findOne({sessionId})
       if(isExist){
-        return res.json({message: 'Payment Successfull'})
+        return res.json({message: 'Aready Exist'})
       }
 
       await userCollection.updateOne(
