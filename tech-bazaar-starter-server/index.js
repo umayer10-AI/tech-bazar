@@ -96,6 +96,11 @@ async function run() {
       const result = await productsCollection.insertOne({...data, userId: req.user.id})
       res.json(result)
     })
+
+    app.get('/seller/products',async(req,res) => {
+      const result = await productsCollection.find().toArray()
+      res.json(result)
+    })
     
 
     await client.db("admin").command({ ping: 1 });
