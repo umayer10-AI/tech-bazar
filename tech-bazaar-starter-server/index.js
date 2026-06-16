@@ -42,12 +42,22 @@ const verify = async (req,res,next) => {
 
   try{
     const { payload } = await jwtVerify(token, JWKS)
-    console.log(payload)
+    // console.log(payload)
+    req.user = payload
     next()
   }
   catch(error){
-    return res.status(401).json({message: "Forbidden"})
+    return res.status(403).json({message: "Forbidden"})
   }
+}
+
+const sellerVerify = async (req,res,next) => {
+  const user = req.user
+  if(user?.role !== 'seller' || user?.plan !== 'pro'){
+    return res.status(403).json({message: "Forbidden"})
+  }
+  // console.log(user)
+  next()
 }
 
 async function run() {
@@ -81,9 +91,9 @@ async function run() {
 
     })
 
-    app.post('/seller/products',verify, async(req,res) => {
+    app.post('/seller/products',verify,sellerVerify, async(req,res) => {
       const data = req.body
-      const result = await productsCollection.insertOne(data)
+      const result = await productsCollection.insertOne({...data, userId: req.user.id})
       res.json(result)
     })
     
