@@ -1,4 +1,5 @@
 import AddProductModal from '@/components/dashboard/seller/AddProductModal';
+import ProductDetails from '@/components/dashboard/seller/ProductDetails';
 import { sellerProductData } from '@/lib/api/data';
 import React from 'react';
 
@@ -10,7 +11,10 @@ const page = async () => {
     return (
         <div>
             <h1 className='text-3xl font-bold my-5'>products</h1>
-            <AddProductModal></AddProductModal>
+            <div className='mb-5'>
+                <AddProductModal></AddProductModal>
+            </div>
+            <ProductDetails products={data}></ProductDetails>
         </div>
     );
 };
