@@ -14,7 +14,7 @@ import { usePathname, useRouter } from "next/navigation";
 const Sidebar = () => {
   const { data: session } = authClient.useSession();
   const user = session?.user;
-  console.log(user)
+  // console.log(user)
 
   const pathname = usePathname();
   const router = useRouter();

@@ -1,61 +1,117 @@
-'use client'
-import React from 'react';
-import {Button, Input, Label, Modal, Surface, TextField} from "@heroui/react";
+"use client";
+import React from "react";
+import {Button,Input,Label,Modal,Surface,TextField,} from "@heroui/react";
+import { uploadImageToImgBB } from "@/lib/imgbb";
 
 const AddProductModal = () => {
-    return (
-        <div>
-            <Modal>
-      <Button variant="secondary">Open Contact Form</Button>
+    
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(e.target);
+
+  const product = {
+    ...Object.fromEntries(formData),
+  };
+
+  product.quantity = Number(product.quantity);
+
+  try {
+    const imageUrl = await uploadImageToImgBB(product.image);
+
+    const productData = {
+      ...product,
+      image: imageUrl,
+    };
+
+    console.log(productData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+  return (
+    <Modal>
+      <Button variant="secondary">Open Product Form</Button>
+
       <Modal.Backdrop>
         <Modal.Container placement="auto">
           <Modal.Dialog className="sm:max-w-md">
             <Modal.CloseTrigger />
+
             <Modal.Header>
-              <Modal.Heading>Contact Us</Modal.Heading>
-              <p className="mt-1.5 text-sm leading-5 text-muted">
-                Fill out the form below and we willl get back to you. The modal adapts automatically
-                when the keyboard appears on mobile.
-              </p>
+              <Modal.Heading>Add Product</Modal.Heading>
             </Modal.Header>
+
             <Modal.Body className="p-6">
               <Surface variant="default">
-                <form className="flex flex-col gap-4">
-                  <TextField className="w-full" name="name" type="text" variant="secondary">
-                    <Label>Name</Label>
-                    <Input placeholder="Enter your name" />
+                <form
+                  onSubmit={handleSubmit}
+                  className="flex flex-col gap-4"
+                >
+                  <TextField
+                    className="w-full"
+                    name="title"
+                    variant="secondary"
+                  >
+                    <Label>Title</Label>
+                    <Input placeholder="Title" />
                   </TextField>
-                  <TextField className="w-full" name="email" type="email" variant="secondary">
-                    <Label>Email</Label>
-                    <Input placeholder="Enter your email" />
+
+                  <TextField
+                    className="w-full"
+                    name="description"
+                    variant="secondary"
+                  >
+                    <Label>Description</Label>
+                    <Input placeholder="Description" />
                   </TextField>
-                  <TextField className="w-full" name="phone" type="tel" variant="secondary">
-                    <Label>Phone</Label>
-                    <Input placeholder="Enter your phone number" />
+
+                  <TextField
+                    className="w-full"
+                    name="price"
+                    variant="secondary"
+                  >
+                    <Label>Price</Label>
+                    <Input placeholder="Price" />
                   </TextField>
-                  <TextField className="w-full" name="company" variant="secondary">
-                    <Label>Company</Label>
-                    <Input placeholder="Enter your company name" />
+
+                  <TextField
+                    className="w-full"
+                    name="quantity"
+                    variant="secondary"
+                  >
+                    <Label>Quantity</Label>
+                    <Input placeholder="Quantity" />
                   </TextField>
-                  <TextField className="w-full" name="message" variant="secondary">
-                    <Label>Message</Label>
-                    <Input placeholder="Enter your message" />
-                  </TextField>
+
+                  <div className="space-y-2">
+                    <Label>Image</Label>
+                    <Input
+                      type="file"
+                      name="image"
+                      accept="image/*"
+                      required
+                    />
+                  </div>
+
+                  <Modal.Footer>
+                    <Button slot="close" variant="secondary">
+                      Cancel
+                    </Button>
+
+                    <Button type="submit">
+                      Add Product
+                    </Button>
+                  </Modal.Footer>
                 </form>
               </Surface>
             </Modal.Body>
-            <Modal.Footer>
-              <Button slot="close" variant="secondary">
-                Cancel
-              </Button>
-              <Button slot="close">Send Message</Button>
-            </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
       </Modal.Backdrop>
     </Modal>
-        </div>
-    );
+  );
 };
 
 export default AddProductModal;
