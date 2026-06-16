@@ -29,7 +29,31 @@ async function run() {
   try {
     await client.connect();
     const db = client.db("tech-bazaar");
+    const subcriptionCollection = db.collection('subscriptions')
+    const userCollection = db.collection('user')
 
+
+    app.post('/subscription', async(req,res) => {
+      const {sessionId, priceId, userId} = req.body
+      await subcriptionCollection.insertOne({
+        sessionId,
+        priceId,
+        userId,
+      })
+
+      const isExist = await subcriptionCollection.findOne({sessionId})
+      if(isExist){
+        return res.json({message: 'Payment Successfull'})
+      }
+
+      await userCollection.updateOne(
+        {_id: new ObjectId(userId)},
+        { $set: { plan: 'pro'}}
+      )
+
+      res.json({message: 'Payment Successfull'})
+
+    })
     
 
     await client.db("admin").command({ ping: 1 });

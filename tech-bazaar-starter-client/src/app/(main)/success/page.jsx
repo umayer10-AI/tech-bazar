@@ -2,6 +2,7 @@ import { stripe } from "@/lib/stripe";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle, Sparkles, ArrowRight } from "lucide-react";
+import { subscription } from "@/lib/action/payment";
 
 export default async function Success({ searchParams }) {
   const { session_id } = await searchParams;
@@ -12,6 +13,7 @@ export default async function Success({ searchParams }) {
 
   const {
     status,
+    metadata,
     customer_details: { email: customerEmail },
   } = await stripe.checkout.sessions.retrieve(session_id, {
     expand: ["line_items", "payment_intent"],
@@ -22,6 +24,9 @@ export default async function Success({ searchParams }) {
   }
 
   if (status === "complete") {
+
+    await subscription({...metadata, sessionId: session_id})
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black flex items-center justify-center p-6">
         <div className="w-full max-w-2xl">
