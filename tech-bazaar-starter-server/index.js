@@ -88,7 +88,6 @@ async function run() {
       )
 
       res.json({message: 'Payment Successfull'})
-
     })
 
     app.post('/seller/products',verify,sellerVerify, async(req,res) => {
