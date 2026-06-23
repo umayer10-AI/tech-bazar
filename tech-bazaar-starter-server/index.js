@@ -10,8 +10,8 @@ const nodemailer = require('nodemailer')
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: "umayer@gmail.com",
-    pass: "*******"
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD
   }
 })
 
@@ -173,8 +173,21 @@ app.get("/", (req, res) => {
 });
 
 app.post('/api/send-email', async(req,res) => {
-  const {name,email} = req.query
-  console.log(name, email)
+    const {name,email} = req.query
+    // console.log(name, email)
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Welcome!",
+      html: `
+      <h1>Welcome to our service. ${name}</h1>
+      <p>Thank you for signing up. We are excitited to have you on board</p>
+      <p>Best regards,<br/> the Team</p>
+      `
+    }
+
+    transporter.sendMail(mailOptions)
+
 })
 
 app.listen(PORT, () => {
