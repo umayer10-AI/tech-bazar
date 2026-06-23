@@ -22,10 +22,18 @@ export default function SignInPage() {
     const formData = new FormData(e.currentTarget);
     const user = Object.fromEntries(formData.entries());
 
-    await authClient.signIn.email({
+    const { data, error } = await authClient.signIn.email({
       ...user,
       callbackURL: "/",
     });
+
+    if(data){
+      alert('data successfully')
+    }
+    if(error){
+      alert(`${error.message}`)
+    }
+
   };
 
   return (

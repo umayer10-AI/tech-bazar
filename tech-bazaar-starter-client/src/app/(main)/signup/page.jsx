@@ -22,10 +22,17 @@ export default function SignUpPage() {
     const formData = new FormData(e.currentTarget);
     const user = Object.fromEntries(formData.entries());
 
-    await authClient.signUp.email({
+    const { data, error } = await authClient.signUp.email({
       ...user,
       plan: 'free',
     });
+
+    if(data){
+      alert('data successfully')
+    }
+    if(error){
+      alert(`${error.message}`)
+    }
 
     redirect('/')
   };
