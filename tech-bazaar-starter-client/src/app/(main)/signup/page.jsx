@@ -1,4 +1,5 @@
 "use client";
+import { emailVerification } from "@/lib/api/actionData";
 import { authClient } from "@/lib/auth-client";
 import {
   Button,
@@ -30,6 +31,7 @@ export default function SignUpPage() {
 
     if(data){
       alert('data successfully')
+      await emailVerification(user?.email, user?.name)
     }
     if(error){
       alert(`${error.message}`)

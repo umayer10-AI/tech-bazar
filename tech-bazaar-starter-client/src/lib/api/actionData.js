@@ -7,9 +7,9 @@ export const addProduct = async(v,t) => {
 export const emailVerification = async(email,name) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/send-email?email=${email}&name=${name}`,{
         method: "POST",
-        headers: {
-            'content-type' : 'application/json'
-        },
+        // headers: {
+        //     'content-type' : 'application/json'
+        // },
         // body:
     })
 }

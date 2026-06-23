@@ -1,4 +1,5 @@
 "use client";
+import { emailVerification } from "@/lib/api/actionData";
 import { authClient } from "@/lib/auth-client";
 import {
   Button,
@@ -21,7 +22,7 @@ export default function SignInPage() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const user = Object.fromEntries(formData.entries());
-    console.log(user?.email)
+    console.log(user)
 
     const { data, error } = await authClient.signIn.email({
       ...user,
@@ -30,6 +31,7 @@ export default function SignInPage() {
 
     if(data){
       alert('data successfully')
+      // await emailVerification(user?.email, user?.name)
     }
     if(error){
       alert(`${error.message}`)

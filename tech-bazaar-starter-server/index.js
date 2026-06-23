@@ -5,6 +5,16 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const { createRemoteJWKSet, jwtVerify } = require("jose-cjs");
 dontenv.config();
 
+const nodemailer = require('nodemailer')
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: "umayer@gmail.com",
+    pass: "*******"
+  }
+})
+
 const uri = process.env.MONGODB_URI;
 
 const app = express();
@@ -163,7 +173,8 @@ app.get("/", (req, res) => {
 });
 
 app.post('/api/send-email', async(req,res) => {
-  
+  const {name,email} = req.query
+  console.log(name, email)
 })
 
 app.listen(PORT, () => {
