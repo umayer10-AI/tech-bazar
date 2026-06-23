@@ -119,7 +119,7 @@ async function run() {
 
     app.get('/products', async(req,res) => {
       const {search} = req.query
-      console.log(search)
+      // console.log(search)
       let cursor;
       if(!search){
         cursor = await productsCollection.find()
@@ -161,6 +161,10 @@ run().catch(console.dir);
 app.get("/", (req, res) => {
   res.send("Server is running fine!");
 });
+
+app.post('/api/send-email', async(req,res) => {
+  
+})
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

@@ -21,6 +21,7 @@ export default function SignInPage() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const user = Object.fromEntries(formData.entries());
+    console.log(user?.email)
 
     const { data, error } = await authClient.signIn.email({
       ...user,
